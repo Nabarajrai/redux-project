@@ -1,72 +1,33 @@
-// import React from "react";
-// import { connect } from "react-redux";
-// import { Container, Row, Col, Button } from "reactstrap";
-// import { selectSong } from "../actions";
-// import SongsDetails from "./songsDetails";
-
-// const songList = (props) => {
-//   const listsSongs = props.songs.map((item, i) => (
-//     <Container key={i}>
-//       <Row>
-//         <Col>
-//           <h6>{item.title}</h6>
-//         </Col>
-//         <Col>
-//           <Button onClick={() => props.selectSong(item)} color="primary">
-//             Select
-//           </Button>
-//         </Col>
-//         <hr />
-//       </Row>
-//     </Container>
-//   ));
-//   console.log("render from songList");
-//   return (
-//     <>
-//       <Row>
-//         <Col md="8" sm="7">
-//           <h3>Song List</h3>
-//           <div>{listsSongs}</div>
-//         </Col>
-//         <Col md="4" sm="5">
-//           <h4>Song Details</h4>
-//           <SongsDetails />
-//         </Col>
-//       </Row>
-//     </>
-//   );
-// };
-
-// const mapStateToProps = (state) => {
-//   console.log(state);
-//   return {
-//     songs: state.song,
-//   };
-// };
-
-// export default connect(mapStateToProps, { selectSong })(songList);
-
 import React from "react";
-import { connect } from "react-redux";
+import { Container, Row, Col, Button } from "reactstrap";
+import { useSelector, useDispatch } from "react-redux";
+import { SelectedSong } from "../actions";
+import SongsDetails from "../components/songsDetails";
 
-function songList(props) {
-  console.log(props);
-  const Increment = () => {
-    props.dispatch({ type: "add" });
-  };
-  const Decrement = () => {
-    props.dispatch({ type: "sub" });
-  };
+const SongList = () => {
+  const song = useSelector((state) => state.song);
+  const dispatch = useDispatch();
+  const songList = song.map((songs) => (
+    <Container key={songs.title}>
+      <Row>
+        <Col>{songs.title}</Col>
+        <Col>
+          <Button onClick={() => dispatch(SelectedSong(songs))} color="primary">
+            Select
+          </Button>
+        </Col>
+      </Row>
+      <hr></hr>
+    </Container>
+  ));
   return (
     <div>
-      <button onClick={Increment}>add</button>
-      <button onClick={Decrement}>sub</button>
-      <span>count:{props.count}</span>
+      <div>{songList}</div>
+      <div>
+        <SongsDetails />
+      </div>
     </div>
   );
-}
-const mapToDispatchToProps = (dispatch) => {
-  return dispatch;
 };
 
-export default connect(mapToDispatchToProps)(songList);
+export default SongList;
